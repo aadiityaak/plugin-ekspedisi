@@ -160,6 +160,11 @@ function cmb2_custom_metabox()
             'class' => $kecamatan_asal_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
     ));
+    $cmb_dari->add_field(array(
+        'name' => 'Alamat Asal',
+        'id'   => 'alamat_asal',
+        'type' => 'hidden',
+    ));
 
     $cmb_tujuan = new_cmb2_box(array(
         'id'            => 'metabox_tujuan',
@@ -195,7 +200,6 @@ function cmb2_custom_metabox()
             'class' => $kabupaten_tujuan_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
     ));
-
     // Field untuk kecamatan
     $kecamatan_tujuan_value = get_post_meta( $post_id, 'kecamatan_tujuan', true );
     $cmb_tujuan->add_field(array(
@@ -209,6 +213,11 @@ function cmb2_custom_metabox()
         'attributes'       => array(
             'class' => $kecamatan_tujuan_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
+    ));
+    $cmb_tujuan->add_field(array(
+        'name' => 'Alamat Tujuan',
+        'id'   => 'alamat_tujuan',
+        'type' => 'hidden',
     ));
 
     $cmb_ongkir = new_cmb2_box(array(

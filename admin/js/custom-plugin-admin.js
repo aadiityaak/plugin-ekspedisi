@@ -58,7 +58,7 @@ jQuery(document).ready(function ($) {
       );
     }
   }
-
+  // Fungsi untuk mengupdate alamat tujuan
   // Memanggil fungsi untuk mengisi elemen select provinsi_asal
   populateProvinsiFromLocalStorage(
     $("#provinsi_asal"),
@@ -72,206 +72,214 @@ jQuery(document).ready(function ($) {
     $("#provinsi_tujuan").attr("class")
   );
   // KABUPATEN & KECAMATAN
-  $(document).ready(function () {
-    const provinsiSelectAsal = $("#provinsi_asal");
-    const kabupatenSelectAsal = $("#kabupaten_asal");
-    const kecamatanSelectAsal = $("#kecamatan_asal");
-    const provinsiSelectTujuan = $("#provinsi_tujuan");
-    const kabupatenSelectTujuan = $("#kabupaten_tujuan");
-    const kecamatanSelectTujuan = $("#kecamatan_tujuan");
-    function populateKabupaten(selectElem, provinsiId, selected) {
-      selectElem.empty();
-      if (!provinsiId) {
-        console.log("Provinsi belum dipilih.");
-        return;
-      }
+  // $(document).ready(function () {
+  const provinsiSelectAsal = $("#provinsi_asal");
+  const kabupatenSelectAsal = $("#kabupaten_asal");
+  const kecamatanSelectAsal = $("#kecamatan_asal");
+  const provinsiSelectTujuan = $("#provinsi_tujuan");
+  const kabupatenSelectTujuan = $("#kabupaten_tujuan");
+  const kecamatanSelectTujuan = $("#kecamatan_tujuan");
+  function populateKabupaten(selectElem, provinsiId, selected) {
+    selectElem.empty();
+    if (!provinsiId) {
+      console.log("Provinsi belum dipilih.");
+      return;
+    }
 
-      const apiUrl = `https://aadiityaak.github.io/api-wilayah-indonesia/api/regencies/${provinsiId}.json`;
+    const apiUrl = `https://aadiityaak.github.io/api-wilayah-indonesia/api/regencies/${provinsiId}.json`;
 
-      // Mengecek apakah data kabupaten sudah ada di local storage
-      const kabupatenDataString = localStorage.getItem(
-        `kabupaten_${provinsiId}`
-      );
-      if (kabupatenDataString) {
-        // Jika sudah ada, mengambil data dari local storage
-        const kabupatenData = JSON.parse(kabupatenDataString);
-        // Mengisi elemen select dengan opsi-opsi dari data kabupaten
-        $.each(kabupatenData, function (index, kabupaten) {
-          selectElem.append(
-            $("<option>", {
-              value: kabupaten.id,
-              selected: kabupaten.id === selected,
-              text: kabupaten.name,
-            })
-          );
-        });
-        console.log(
-          "Data kabupaten dari local storage berhasil dimuat ke dalam elemen select."
+    // Mengecek apakah data kabupaten sudah ada di local storage
+    const kabupatenDataString = localStorage.getItem(`kabupaten_${provinsiId}`);
+    if (kabupatenDataString) {
+      // Jika sudah ada, mengambil data dari local storage
+      const kabupatenData = JSON.parse(kabupatenDataString);
+      // Mengisi elemen select dengan opsi-opsi dari data kabupaten
+      $.each(kabupatenData, function (index, kabupaten) {
+        selectElem.append(
+          $("<option>", {
+            value: kabupaten.id,
+            selected: kabupaten.id === selected,
+            text: kabupaten.name,
+          })
         );
-      } else {
-        // Jika belum ada, mengambil data dari API
-        $.ajax({
-          url: apiUrl,
-          type: "GET",
-          dataType: "json",
-          success: function (data) {
-            // Menyimpan data kabupaten ke local storage
-            localStorage.setItem(
-              `kabupaten_${provinsiId}`,
-              JSON.stringify(data)
-            );
-
-            // Mengisi elemen select dengan opsi-opsi dari data kabupaten
-            $.each(data, function (index, kabupaten) {
-              selectElem.append(
-                $("<option>", {
-                  value: kabupaten.id,
-                  selected: kabupaten.id === selected,
-                  text: kabupaten.name,
-                })
-              );
-            });
-
-            console.log(
-              "Data kabupaten berhasil dimuat ke dalam elemen select."
-            );
-          },
-          error: function (error) {
-            console.error(
-              "Terjadi kesalahan saat mengambil data kabupaten:",
-              error
-            );
-          },
-        });
-      }
-    }
-
-    function populateKecamatan(selectElem, kabupatenId, selected) {
-      selectElem.empty();
-
-      if (!kabupatenId) {
-        console.log("Kabupaten belum dipilih.");
-        return;
-      }
-
-      // Mengecek apakah data kecamatan sudah ada di local storage
-      const kecamatanDataString = localStorage.getItem(
-        `kecamatan_${kabupatenId}`
+      });
+      console.log(
+        "Data kabupaten dari local storage berhasil dimuat ke dalam elemen select."
       );
-      if (kecamatanDataString) {
-        // Jika sudah ada, mengambil data dari local storage
-        const kecamatanData = JSON.parse(kecamatanDataString);
-        // Mengisi elemen select dengan opsi-opsi dari data kecamatan
-        $.each(kecamatanData, function (index, kecamatan) {
-          selectElem.append(
-            $("<option>", {
-              value: kecamatan.id,
-              selected: kecamatan.id === selected,
-              text: kecamatan.name,
-            })
+    } else {
+      // Jika belum ada, mengambil data dari API
+      $.ajax({
+        url: apiUrl,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          // Menyimpan data kabupaten ke local storage
+          localStorage.setItem(`kabupaten_${provinsiId}`, JSON.stringify(data));
+
+          // Mengisi elemen select dengan opsi-opsi dari data kabupaten
+          $.each(data, function (index, kabupaten) {
+            selectElem.append(
+              $("<option>", {
+                value: kabupaten.id,
+                selected: kabupaten.id === selected,
+                text: kabupaten.name,
+              })
+            );
+          });
+
+          console.log("Data kabupaten berhasil dimuat ke dalam elemen select.");
+        },
+        error: function (error) {
+          console.error(
+            "Terjadi kesalahan saat mengambil data kabupaten:",
+            error
           );
-        });
-        console.log(
-          "Data kecamatan dari local storage berhasil dimuat ke dalam elemen select."
+        },
+      });
+    }
+  }
+
+  function populateKecamatan(selectElem, kabupatenId, selected) {
+    selectElem.empty();
+
+    if (!kabupatenId) {
+      console.log("Kabupaten belum dipilih.");
+      return;
+    }
+
+    // Mengecek apakah data kecamatan sudah ada di local storage
+    const kecamatanDataString = localStorage.getItem(
+      `kecamatan_${kabupatenId}`
+    );
+    if (kecamatanDataString) {
+      // Jika sudah ada, mengambil data dari local storage
+      const kecamatanData = JSON.parse(kecamatanDataString);
+      // Mengisi elemen select dengan opsi-opsi dari data kecamatan
+      $.each(kecamatanData, function (index, kecamatan) {
+        selectElem.append(
+          $("<option>", {
+            value: kecamatan.id,
+            selected: kecamatan.id === selected,
+            text: kecamatan.name,
+          })
         );
-      } else {
-        // Jika belum ada, mengambil data dari API
-        const apiUrl = `https://aadiityaak.github.io/api-wilayah-indonesia/api/districts/${kabupatenId}.json`;
-        $.ajax({
-          url: apiUrl,
-          type: "GET",
-          dataType: "json",
-          success: function (data) {
-            // Menyimpan data kecamatan ke local storage
-            localStorage.setItem(
-              `kecamatan_${kabupatenId}`,
-              JSON.stringify(data)
+      });
+      console.log(
+        "Data kecamatan dari local storage berhasil dimuat ke dalam elemen select."
+      );
+    } else {
+      // Jika belum ada, mengambil data dari API
+      const apiUrl = `https://aadiityaak.github.io/api-wilayah-indonesia/api/districts/${kabupatenId}.json`;
+      $.ajax({
+        url: apiUrl,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          // Menyimpan data kecamatan ke local storage
+          localStorage.setItem(
+            `kecamatan_${kabupatenId}`,
+            JSON.stringify(data)
+          );
+
+          // Mengisi elemen select dengan opsi-opsi dari data kecamatan
+          $.each(data, function (index, kecamatan) {
+            selectElem.append(
+              $("<option>", {
+                value: kecamatan.id,
+                selected: kecamatan.id === selected,
+                text: kecamatan.name,
+              })
             );
+          });
 
-            // Mengisi elemen select dengan opsi-opsi dari data kecamatan
-            $.each(data, function (index, kecamatan) {
-              selectElem.append(
-                $("<option>", {
-                  value: kecamatan.id,
-                  selected: kecamatan.id === selected,
-                  text: kecamatan.name,
-                })
-              );
-            });
-
-            console.log(
-              "Data kecamatan berhasil dimuat ke dalam elemen select."
-            );
-          },
-          error: function (error) {
-            console.error(
-              "Terjadi kesalahan saat mengambil data kecamatan:",
-              error
-            );
-          },
-        });
-      }
+          console.log("Data kecamatan berhasil dimuat ke dalam elemen select.");
+        },
+        error: function (error) {
+          console.error(
+            "Terjadi kesalahan saat mengambil data kecamatan:",
+            error
+          );
+        },
+      });
     }
+  }
 
-    // jalankan fungsi populateKabupaten setiap kali elemen select provinsi_asal berubah dan jika ditemukan class di id #provinsi_asal
-    if ($("#provinsi_asal").attr("class") !== "") {
-      const selectedProvinsiId = $("#provinsi_asal").attr("class");
-      populateKabupaten(
-        kabupatenSelectAsal,
-        selectedProvinsiId,
-        $("#kabupaten_asal").attr("class")
-      );
-    }
-    provinsiSelectAsal.on("change", function () {
-      const selectedProvinsiId = $(this).val();
-      populateKabupaten(
-        kabupatenSelectAsal,
-        selectedProvinsiId,
-        $("#kabupaten_asal").attr("class")
-      );
-    });
-
-    if ($("#kabupaten_asal").attr("class") !== "") {
-      const selectedKabupatenId = $("#kabupaten_asal").attr("class");
-      populateKecamatan(
-        kecamatanSelectAsal,
-        selectedKabupatenId,
-        $("#kecamatan_asal").attr("class")
-      );
-    }
-    kabupatenSelectAsal.on("change", function () {
-      const selectedKabupatenId = $(this).val();
-      populateKecamatan(kecamatanSelectAsal, selectedKabupatenId);
-    });
-
-    // Menangani peristiwa change pada elemen select provinsi_tujuan
-    if ($("#provinsi_tujuan").attr("class") !== "") {
-      const selectedProvinsiId = $("#provinsi_tujuan").attr("class");
-      populateKabupaten(
-        kabupatenSelectTujuan,
-        selectedProvinsiId,
-        $("#kabupaten_tujuan").attr("class")
-      );
-    }
-    provinsiSelectTujuan.on("change", function () {
-      const selectedProvinsiId = $(this).val();
-      populateKabupaten(kabupatenSelectTujuan, selectedProvinsiId);
-    });
-
-    // Menangani peristiwa change pada elemen select kabupaten_tujuan
-    if ($("#kabupaten_tujuan").attr("class") !== "") {
-      const selectedKabupatenId = $("#kabupaten_tujuan").attr("class");
-      populateKecamatan(
-        kecamatanSelectTujuan,
-        selectedKabupatenId,
-        $("#kecamatan_tujuan").attr("class")
-      );
-    }
-    kabupatenSelectTujuan.on("change", function () {
-      const selectedKabupatenId = $(this).val();
-      populateKecamatan(kecamatanSelectTujuan, selectedKabupatenId);
-    });
+  // jalankan fungsi populateKabupaten setiap kali elemen select provinsi_asal berubah dan jika ditemukan class di id #provinsi_asal
+  if ($("#provinsi_asal").attr("class") !== "") {
+    const selectedProvinsiId = $("#provinsi_asal").attr("class");
+    populateKabupaten(
+      kabupatenSelectAsal,
+      selectedProvinsiId,
+      $("#kabupaten_asal").attr("class")
+    );
+  }
+  provinsiSelectAsal.on("change", function () {
+    const selectedProvinsiId = $(this).val();
+    populateKabupaten(
+      kabupatenSelectAsal,
+      selectedProvinsiId,
+      $("#kabupaten_asal").attr("class")
+    );
   });
+
+  if ($("#kabupaten_asal").attr("class") !== "") {
+    const selectedKabupatenId = $("#kabupaten_asal").attr("class");
+    populateKecamatan(
+      kecamatanSelectAsal,
+      selectedKabupatenId,
+      $("#kecamatan_asal").attr("class")
+    );
+  }
+  kabupatenSelectAsal.on("change", function () {
+    const selectedKabupatenId = $(this).val();
+    populateKecamatan(kecamatanSelectAsal, selectedKabupatenId);
+  });
+
+  kecamatanSelectAsal.on("change", function () {
+    const namaKecamatan = $(this).find(":selected").text();
+    const namaKabupaten = $("#kabupaten_asal").find(":selected").text();
+    const namaProvinsi = $("#provinsi_asal").find(":selected").text();
+    $("#alamat_asal").val(
+      namaKecamatan + ", " + namaKabupaten + ", " + namaProvinsi
+    );
+  });
+
+  // Menangani peristiwa change pada elemen select provinsi_tujuan
+  if ($("#provinsi_tujuan").attr("class") !== "") {
+    const selectedProvinsiId = $("#provinsi_tujuan").attr("class");
+    populateKabupaten(
+      kabupatenSelectTujuan,
+      selectedProvinsiId,
+      $("#kabupaten_tujuan").attr("class")
+    );
+  }
+  provinsiSelectTujuan.on("change", function () {
+    const selectedProvinsiId = $(this).val();
+    populateKabupaten(kabupatenSelectTujuan, selectedProvinsiId);
+  });
+
+  // Menangani peristiwa change pada elemen select kabupaten_tujuan
+  if ($("#kabupaten_tujuan").attr("class") !== "") {
+    const selectedKabupatenId = $("#kabupaten_tujuan").attr("class");
+    populateKecamatan(
+      kecamatanSelectTujuan,
+      selectedKabupatenId,
+      $("#kecamatan_tujuan").attr("class")
+    );
+  }
+  kabupatenSelectTujuan.on("change", function () {
+    const selectedKabupatenId = $(this).val();
+    populateKecamatan(kecamatanSelectTujuan, selectedKabupatenId);
+  });
+  kecamatanSelectTujuan.on("change", function () {
+    const namaKecamatan = $(this).find(":selected").text();
+    const namaKabupaten = $("#kabupaten_tujuan").find(":selected").text();
+    const namaProvinsi = $("#provinsi_tujuan").find(":selected").text();
+    $("#alamat_tujuan").val(
+      namaKecamatan + ", " + namaKabupaten + ", " + namaProvinsi
+    );
+  });
+  // });
 });
 
 // Mengecek apakah data sudah ada di local storage
