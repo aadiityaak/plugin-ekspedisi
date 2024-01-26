@@ -1,0 +1,25 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+.cmb-type-group .cmb2-wrap > .cmb-field-list > .cmb-row,
+.cmb2-postbox .cmb2-wrap > .cmb-field-list > .cmb-row {
+  padding: 0 !important;
+}
+
+.cmb2-postbox .cmb-row:not(:last-of-type) {
+  border-bottom: none !important;
+}
+
+.cmb-type-group .cmb-row,
+.cmb2-postbox .cmb-row {
+  padding: 0 !important;
+}
+
+.cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row {
+  left: -10px !important;
+}
+.cmb2-wrap select,
+.cmb2-wrap input {
+  width: 100% !important;
+}
