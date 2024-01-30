@@ -117,52 +117,52 @@ function cmb2_custom_metabox()
     ));
 
     // Field untuk provinsi
-    $provinsi_asal_value = get_post_meta( $post_id, 'provinsi_asal', true );
+    $provinsi_dari_value = get_post_meta( $post_id, 'provinsi_dari', true );
     $cmb_dari->add_field( array(
         'name'             => 'Provinsi',
-        'id'               => 'provinsi_asal',
+        'id'               => 'provinsi_dari',
         'type'             => 'select',
         'show_option_none' => true,
         'options'          => array(
             '-' => esc_html__( '-', 'cmb2' ),
         ),
         'attributes'       => array(
-            'class' => $provinsi_asal_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
+            'class' => $provinsi_dari_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         ),
     ) );
 
     // Field untuk kabupaten
-    $kabupaten_asal_value = get_post_meta( $post_id, 'kabupaten_asal', true );
+    $kabupaten_dari_value = get_post_meta( $post_id, 'kabupaten_dari', true );
     $cmb_dari->add_field(array(
         'name' => 'Kabupaten/Kota',
-        'id'   => 'kabupaten_asal',
+        'id'   => 'kabupaten_dari',
 		'type'             => 'select',
 		'show_option_none' => true,
 		'options'          => array(
 			'-' => esc_html__( '-', 'cmb2' ),
 		),
         'attributes'       => array(
-            'class' => $kabupaten_asal_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
+            'class' => $kabupaten_dari_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
     ));
 
     // Field untuk kecamatan
-    $kecamatan_asal_value = get_post_meta( $post_id, 'kecamatan_asal', true );
+    $kecamatan_dari_value = get_post_meta( $post_id, 'kecamatan_dari', true );
     $cmb_dari->add_field(array(
         'name' => 'Kecamatan',
-        'id'   => 'kecamatan_asal',
+        'id'   => 'kecamatan_dari',
 		'type'             => 'select',
 		'show_option_none' => true,
 		'options'          => array(
 			'-' => esc_html__( '-', 'cmb2' ),
 		),
         'attributes'       => array(
-            'class' => $kecamatan_asal_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
+            'class' => $kecamatan_dari_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
     ));
     $cmb_dari->add_field(array(
-        'name' => 'Alamat Asal',
-        'id'   => 'alamat_asal',
+        'name' => 'Alamat Dari',
+        'id'   => 'alamat_dari',
         'type' => 'hidden',
     ));
 
@@ -237,6 +237,69 @@ function cmb2_custom_metabox()
         'name' => 'Tarif/Kg',
         'id'   => 'tarif',
         'type' => 'text',
+    ));
+
+
+    // Detail Absensi Metabox
+    $detail_absensi_metabox = new_cmb2_box(array(
+        'id'           => $prefix . 'detail_absensi',
+        'title'        => esc_html__('Detail Absensi', 'online-generator'),
+        'object_types' => ['absensi'],
+        'context'      => 'normal',
+    ));
+
+    // Fields for Detail Absensi Metabox
+    $detail_absensi_metabox->add_field(array(
+        'name' => esc_html__('Tanggal (Date)', 'online-generator'),
+        'id'   => $prefix . 'tanggal',
+        'type' => 'text_date',
+    ));
+
+    $detail_absensi_metabox->add_field(array(
+        'name' => esc_html__('Jam Masuk (Check-in Time)', 'online-generator'),
+        'id'   => $prefix . 'jam_masuk',
+        'type' => 'text_time',
+    ));
+
+    $detail_absensi_metabox->add_field(array(
+        'name' => esc_html__('Jam Pulang (Check-out Time)', 'online-generator'),
+        'id'   => $prefix . 'jam_pulang',
+        'type' => 'text_time',
+    ));
+
+    $detail_absensi_metabox->add_field(array(
+        'name' => esc_html__('Lokasi (Location)', 'online-generator'),
+        'id'   => $prefix . 'lokasi',
+        'type' => 'text',
+    ));
+
+    $detail_absensi_metabox->add_field(array(
+        'name'    => esc_html__('Status Kehadiran', 'online-generator'),
+        'id'      => $prefix . 'status_kehadiran',
+        'type'    => 'select',
+        'options' => [
+            'Hadir'       => esc_html__('Hadir', 'online-generator'),
+            'Izin'        => esc_html__('Izin', 'online-generator'),
+            'Tidak hadir' => esc_html__('Tidak hadir', 'online-generator'),
+        ],
+    ));
+
+    $detail_absensi_metabox->add_field(array(
+        'name' => esc_html__('Keterangan (Remarks)', 'online-generator'),
+        'id'   => $prefix . 'keterangan',
+        'type' => 'textarea',
+    ));
+
+    $detail_absensi_metabox->add_field(array(
+        'name' => esc_html__('Nama Karyawan (User ID)', 'online-generator'),
+        'id'   => $prefix . 'nama_karyawan',
+        'type' => 'text',
+    ));
+
+    $detail_absensi_metabox->add_field(array(
+        'name' => esc_html__('Face ID', 'online-generator'),
+        'id'   => $prefix . 'face_id',
+        'type' => 'textarea',
     ));
 }
 

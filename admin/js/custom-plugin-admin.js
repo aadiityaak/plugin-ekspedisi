@@ -59,11 +59,11 @@ jQuery(document).ready(function ($) {
     }
   }
   // Fungsi untuk mengupdate alamat tujuan
-  // Memanggil fungsi untuk mengisi elemen select provinsi_asal
+  // Memanggil fungsi untuk mengisi elemen select provinsi_dari
   populateProvinsiFromLocalStorage(
-    $("#provinsi_asal"),
+    $("#provinsi_dari"),
     "provincesData",
-    $("#provinsi_asal").attr("class")
+    $("#provinsi_dari").attr("class")
   );
   // Memanggil fungsi untuk mengisi elemen select provinsi_tujuan
   populateProvinsiFromLocalStorage(
@@ -73,9 +73,9 @@ jQuery(document).ready(function ($) {
   );
   // KABUPATEN & KECAMATAN
   // $(document).ready(function () {
-  const provinsiSelectAsal = $("#provinsi_asal");
-  const kabupatenSelectAsal = $("#kabupaten_asal");
-  const kecamatanSelectAsal = $("#kecamatan_asal");
+  const provinsiSelectDari = $("#provinsi_dari");
+  const kabupatenSelectDari = $("#kabupaten_dari");
+  const kecamatanSelectDari = $("#kecamatan_dari");
   const provinsiSelectTujuan = $("#provinsi_tujuan");
   const kabupatenSelectTujuan = $("#kabupaten_tujuan");
   const kecamatanSelectTujuan = $("#kecamatan_tujuan");
@@ -204,42 +204,42 @@ jQuery(document).ready(function ($) {
     }
   }
 
-  // jalankan fungsi populateKabupaten setiap kali elemen select provinsi_asal berubah dan jika ditemukan class di id #provinsi_asal
-  if ($("#provinsi_asal").attr("class") !== "") {
-    const selectedProvinsiId = $("#provinsi_asal").attr("class");
+  // jalankan fungsi populateKabupaten setiap kali elemen select provinsi_dari berubah dan jika ditemukan class di id #provinsi_dari
+  if ($("#provinsi_dari").attr("class") !== "") {
+    const selectedProvinsiId = $("#provinsi_dari").attr("class");
     populateKabupaten(
-      kabupatenSelectAsal,
+      kabupatenSelectDari,
       selectedProvinsiId,
-      $("#kabupaten_asal").attr("class")
+      $("#kabupaten_dari").attr("class")
     );
   }
-  provinsiSelectAsal.on("change", function () {
+  provinsiSelectDari.on("change", function () {
     const selectedProvinsiId = $(this).val();
     populateKabupaten(
-      kabupatenSelectAsal,
+      kabupatenSelectDari,
       selectedProvinsiId,
-      $("#kabupaten_asal").attr("class")
+      $("#kabupaten_dari").attr("class")
     );
   });
 
-  if ($("#kabupaten_asal").attr("class") !== "") {
-    const selectedKabupatenId = $("#kabupaten_asal").attr("class");
+  if ($("#kabupaten_dari").attr("class") !== "") {
+    const selectedKabupatenId = $("#kabupaten_dari").attr("class");
     populateKecamatan(
-      kecamatanSelectAsal,
+      kecamatanSelectDari,
       selectedKabupatenId,
-      $("#kecamatan_asal").attr("class")
+      $("#kecamatan_dari").attr("class")
     );
   }
-  kabupatenSelectAsal.on("change", function () {
+  kabupatenSelectDari.on("change", function () {
     const selectedKabupatenId = $(this).val();
-    populateKecamatan(kecamatanSelectAsal, selectedKabupatenId);
+    populateKecamatan(kecamatanSelectDari, selectedKabupatenId);
   });
 
-  kecamatanSelectAsal.on("change", function () {
+  kecamatanSelectDari.on("change", function () {
     const namaKecamatan = $(this).find(":selected").text();
-    const namaKabupaten = $("#kabupaten_asal").find(":selected").text();
-    const namaProvinsi = $("#provinsi_asal").find(":selected").text();
-    $("#alamat_asal").val(
+    const namaKabupaten = $("#kabupaten_dari").find(":selected").text();
+    const namaProvinsi = $("#provinsi_dari").find(":selected").text();
+    $("#alamat_dari").val(
       namaKecamatan + ", " + namaKabupaten + ", " + namaProvinsi
     );
   });

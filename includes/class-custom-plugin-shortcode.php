@@ -14,6 +14,8 @@ class Custom_Plugin_Shortcode
         add_shortcode('custom-plugin', array($this, 'custom_plugin_text_shortcode_callback')); // [custom-plugin]
         add_shortcode('tracking_shortcode', array($this, 'tracking_shortcode'));
         add_shortcode('tarif_pengiriman', array($this, 'formulir_tarif_pengiriman'));
+        add_shortcode('jam', array($this, 'displayCurrentTime'));
+        add_shortcode('format-tanggal', array($this, 'func_current_date_time_custom_format'));
     }
 
     /**
@@ -74,29 +76,64 @@ class Custom_Plugin_Shortcode
 
     public function formulir_tarif_pengiriman()
     {
-        ob_start(); ?>
+
+        // Buat query untuk mendapatkan semua post type 'ongkir'
+        $query_args = array(
+            'post_type' => 'ongkir',
+            'posts_per_page' => -1, // -1 untuk mendapatkan semua post
+        );
+
+        $ongkir_posts = new WP_Query($query_args);
+
+        // Loop melalui hasil query
+        $alamat = [];
+        while ($ongkir_posts->have_posts()) {
+            $ongkir_posts->the_post();
+
+            // Dapatkan ID post
+            $ongkir_post_id = get_the_ID();
+
+            // Dapatkan nilai meta 'alamat_dari'
+            $alamat_dari = get_post_meta($ongkir_post_id, 'alamat_dari', true);
+            $alamat_tujuan = get_post_meta($ongkir_post_id, 'alamat_tujuan', true);
+            $alamat['dari'][] = $alamat_dari;
+            $alamat['tujuan'][] = $alamat_tujuan;
+        }
+
+        // Reset post data
+        wp_reset_postdata();
+        ob_start(); 
+        // print_r($alamat);
+        ?>
 
         <div class="card">
             <form class="p-4" action="#hasil-ongkir">
                 <h4 class="text-dark fw-bold">TARIF KIRIMAN</h4>
                 <div class="row">
                     <div class="col-md-4 mb-2 mb-md-0">
-                        <select class="form-control" name="dari" required="">
-                            <option value="">Pilih Asal Pengiriman</option>
-                            <option value="Jakarta">Jakarta</option>
-                            <option value="Surabaya">Surabaya</option>
-                        </select>
+                        <input class="form-control" name="dari" list="dari" required>
+                        <datalist id="dari">
+                            <?php
+                            if(isset($alamat['dari']) && is_array($alamat['dari'])){
+                                $daris = array_unique($alamat['dari']);
+                                foreach($daris as $alamat){
+                                    echo '<option value="'.$alamat.'">';
+                                }
+                            }
+                            ?>
+                        </datalist>
                     </div>
                     <div class="col-md-3 mb-2 mb-md-0">
-                        <select class="form-control" name="tujuan" required="">
-                            <option value="">Pilih Tujuan Pengiriman</option>
-                            <option value="Surabaya">Surabaya</option>
-                            <option value="Sidoarjo">Sidoarjo</option>
-                            <option value="Gorontalo">Gorontalo</option>
-                            <option value="Manado">Manado</option>
-                            <option value="Semarang">Semarang</option>
-                            <option value="Jakarta">Jakarta</option>
-                        </select>
+                        <input class="form-control" name="tujuan" list="tujuan" required>
+                        <datalist id="tujuan">
+                            <?php
+                            if(isset($alamat['tujuan']) && is_array($alamat['tujuan'])){
+                                foreach($alamat['tujuan'] as $alamat){
+                                    echo '<option value="'.$alamat.'">';
+                                }
+                            }
+                            ?>
+                        </datalist>
                     </div>
                     <div class="col-md-3 mb-2 mb-md-0">
                         <div class="row m-0 align-items-center">
@@ -113,8 +150,34 @@ class Custom_Plugin_Shortcode
             </form>
         </div>
 
-<?php
+        <?php
         return ob_get_clean();
+    }
+
+    public function displayCurrentTime()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $timeFormat = "H:i:s";
+        $currentTime = date($timeFormat);
+        $currentTime = '<div class="real-time-clock">' . $currentTime . '</div>';
+
+        return $currentTime;
+    }
+
+    public function func_current_date_time_custom_format()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        // Format tanggal dengan nama bulan dalam bahasa Indonesia
+        $format_tanggal_waktu = "%A - %d %B %Y";
+
+        // Menggunakan strftime untuk menampilkan nama bulan dalam bahasa Indonesia
+        setlocale(LC_TIME, 'id_ID');
+        $tanggal_waktu_saat_ini = strftime($format_tanggal_waktu);
+
+        // Mengembalikan waktu dan tanggal saat ini
+        return $tanggal_waktu_saat_ini;
     }
 }
 

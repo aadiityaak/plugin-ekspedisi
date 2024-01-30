@@ -127,59 +127,59 @@ class Custom_Plugin_Meta_Box {
             )
         );
 
-        $meta_boxes[] = [
-            'title'      => esc_html__('Detail Absensi', 'online-generator'),
-            'id'         => 'detail_absensi',
-            'post_types' => 'absensi',
-            'context'    => 'normal',
-            'fields'     => [
-                [
-                    'type' => 'date',
-                    'name' => esc_html__('Tanggal (Date)', 'online-generator'),
-                    'id'   => $prefix . 'tanggal',
-                ],
-                [
-                    'type' => 'time',
-                    'name' => esc_html__('Jam Masuk (Check-in Time)', 'online-generator'),
-                    'id'   => $prefix . 'jam_masuk',
-                ],
-                [
-                    'type' => 'time',
-                    'name' => esc_html__('Jam Pulang (Check-out Time)', 'online-generator'),
-                    'id'   => $prefix . 'jam_pulang',
-                ],
-                [
-                    'type' => 'text',
-                    'name' => esc_html__('Lokasi (Location)', 'online-generator'),
-                    'id'   => $prefix . 'lokasi',
-                ],
-                [
-                    'type'    => 'select',
-                    'name'    => esc_html__('Status Kehadiran (Attendance Status)', 'online-generator'),
-                    'id'      => $prefix . 'status_kehadiran',
-                    'options' => [
-                        'Hadir'       => esc_html__('Hadir', 'online-generator'),
-                        'Izin'        => esc_html__('Izin', 'online-generator'),
-                        'Tidak hadir' => esc_html__('Tidak hadir', 'online-generator'),
-                    ],
-                ],
-                [
-                    'type' => 'textarea',
-                    'name' => esc_html__('Keterangan (Remarks)', 'online-generator'),
-                    'id'   => $prefix . 'keterangan',
-                ],
-                [
-                    'type' => 'text',
-                    'name' => esc_html__('Nama Karyawan (User ID)', 'online-generator'),
-                    'id'   => $prefix . 'id_karyawan',
-                ],
-                [
-                    'type'             => 'textarea',
-                    'name'             => esc_html__('Face ID', 'online-generator'),
-                    'id'               => $prefix . 'face_id',
-                ],
-            ],
-        ];
+        // $meta_boxes[] = [
+        //     'title'      => esc_html__( 'Detail Absensi', 'online-generator' ),
+        //     'id'         => 'detail_absensi',
+        //     'post_types' => ['absensi', 'ongkir'],
+        //     'context'    => 'normal',
+        //     'fields'     => [
+        //         [
+        //             'type' => 'date',
+        //             'name' => esc_html__( 'Tanggal (Date)', 'online-generator' ),
+        //             'id'   => $prefix . 'tanggal',
+        //         ],
+        //         [
+        //             'type' => 'time',
+        //             'name' => esc_html__( 'Jam Masuk (Check-in Time)', 'online-generator' ),
+        //             'id'   => $prefix . 'jam_masuk',
+        //         ],
+        //         [
+        //             'type' => 'time',
+        //             'name' => esc_html__( 'Jam Pulang (Check-out Time)', 'online-generator' ),
+        //             'id'   => $prefix . 'jam_pulang',
+        //         ],
+        //         [
+        //             'type' => 'text',
+        //             'name' => esc_html__( 'Lokasi (Location)', 'online-generator' ),
+        //             'id'   => $prefix . 'lokasi',
+        //         ],
+        //         [
+        //             'type'    => 'select',
+        //             'name'    => esc_html__( 'Status Kehadiran', 'online-generator' ),
+        //             'id'      => $prefix . 'status_kehadiran',
+        //             'options' => [
+        //                 'Hadir'       => esc_html__( 'Hadir', 'online-generator' ),
+        //                 'Izin'        => esc_html__( 'Izin', 'online-generator' ),
+        //                 'Tidak hadir' => esc_html__( 'Tidak hadir', 'online-generator' ),
+        //             ],
+        //         ],
+        //         [
+        //             'type' => 'textarea',
+        //             'name' => esc_html__( 'Keterangan (Remarks)', 'online-generator' ),
+        //             'id'   => $prefix . 'keterangan',
+        //         ],
+        //         [
+        //             'type' => 'text',
+        //             'name' => esc_html__( 'Nama Karyawan (User ID)', 'online-generator' ),
+        //             'id'   => $prefix . 'nama_karyawan',
+        //         ],
+        //         [
+        //             'type' => 'textarea',
+        //             'name' => esc_html__( 'Face ID', 'online-generator' ),
+        //             'id'   => $prefix . 'face_id',
+        //         ],
+        //     ],
+        // ];
 
         return $meta_boxes;
     }

@@ -58,7 +58,7 @@ class Custom_Plugin_Post_Types
             array(
                 'labels' => array(
                     'name' => ('Absensi'),
-                    'singular_name' => ('Absensi')
+                    'singular_name' => ('absensi')
                 ),
                 'public' => true,
                 'has_archive' => true,
