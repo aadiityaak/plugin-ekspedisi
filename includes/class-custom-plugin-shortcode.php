@@ -76,7 +76,7 @@ class Custom_Plugin_Shortcode
 
     public function formulir_tarif_pengiriman()
     {
-
+        ob_start();
         // Buat query untuk mendapatkan semua post type 'ongkir'
         $query_args = array(
             'post_type' => 'ongkir',
@@ -102,52 +102,63 @@ class Custom_Plugin_Shortcode
 
         // Reset post data
         wp_reset_postdata();
-        ob_start(); 
+        
+        // echo '<pre>';
         // print_r($alamat);
+        // echo '</pre>';
         ?>
 
         <div class="card">
-            <form class="p-4" action="#hasil-ongkir">
+            <form class="p-4" id="form-cek-ongkir" action="#hasil-ongkir">
                 <h4 class="text-dark fw-bold">TARIF KIRIMAN</h4>
-                <div class="row">
+                <div class="row align-items-end">
                     <div class="col-md-4 mb-2 mb-md-0">
+                        <label for="dari">Dari Alamat</label>
                         <input class="form-control" name="dari" list="dari" required>
                         <datalist id="dari">
                             <?php
                             if(isset($alamat['dari']) && is_array($alamat['dari'])){
                                 $daris = array_unique($alamat['dari']);
-                                foreach($daris as $alamat){
-                                    echo '<option value="'.$alamat.'">';
+                                foreach($daris as $nama_alamat){
+                                    echo '<option value="'.$nama_alamat.'">';
                                 }
                             }
                             ?>
                         </datalist>
                     </div>
-                    <div class="col-md-3 mb-2 mb-md-0">
+                    <div class="col-md-4 mb-2 mb-md-0">
+                        <label for="tujuan">Tujuan Alamat</label>
                         <input class="form-control" name="tujuan" list="tujuan" required>
                         <datalist id="tujuan">
                             <?php
                             if(isset($alamat['tujuan']) && is_array($alamat['tujuan'])){
-                                foreach($alamat['tujuan'] as $alamat){
-                                    echo '<option value="'.$alamat.'">';
+                                $tujuans = array_unique($alamat['tujuan']);
+                                foreach($tujuans as $nama_alamat){
+                                    echo '<option value="'.$nama_alamat.'">';
                                 }
                             }
                             ?>
                         </datalist>
                     </div>
-                    <div class="col-md-3 mb-2 mb-md-0">
-                        <div class="row m-0 align-items-center">
-                            <div class="col-9 p-0">
-                                <input min="1" type="number" class="form-control" name="berat" value="1" required="">
-                            </div>
-                            <div class="col-3 p-1"><small>Kg</small></div>
-                        </div>
+                    <div class="col-md-2 mb-2 mb-md-0">
+                        <label for="berat">Berat (kg)</label>
+                        <input min="1" type="number" class="form-control" name="berat" value="1" required="">
                     </div>
                     <div class="col-md-2 text-center">
-                        <button class="btn btn-primary" type="submit">Cek</button>
+                        <button class="btn btn-primary" type="submit" data-bs-toggle="modal" data-bs-target="#modalOngkir">Cek</button>
                     </div>
                 </div>
             </form>
+            <div class="modal fade" id="modalOngkir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalResiLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content" id="modalOngkirContent">
+                    <div class="p-4">
+                        Loading data...
+                    </div>
+                </div>
+            </div>
+        </div>
+                
         </div>
 
         <?php

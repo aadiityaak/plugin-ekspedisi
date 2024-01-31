@@ -174,3 +174,64 @@ function ambil_nilai_otomatis() {
 }
 // Tambahkan action hook untuk menangani request Ajax
 add_action('wp_ajax_ambil_nilai_otomatis', 'ambil_nilai_otomatis');
+
+
+
+// functions.php atau file PHP lainnya
+add_action('wp_ajax_get_ongkir', 'get_ongkir_data');
+add_action('wp_ajax_nopriv_get_ongkir', 'get_ongkir_data');
+
+function get_ongkir_data() {
+  // Ambil data dari permintaan Ajax
+  $dari = sanitize_text_field($_POST['dari']);
+  $tujuan = sanitize_text_field($_POST['tujuan']);
+  $berat = intval($_POST['berat']);
+
+  // Lakukan sesuatu dengan data ini, misalnya, hitung ongkir
+  $ongkir = hitung_ongkir($dari, $tujuan, $berat);
+
+  // Kembalikan data sebagai respons Ajax
+  echo $ongkir;
+
+  // Pastikan untuk menghentikan eksekusi setelah memberikan respons
+  wp_die();
+}
+
+function hitung_ongkir($dari, $tujuan, $berat) {
+    // Lakukan perhitungan ongkir berdasarkan data yang diterima
+    // Implementasikan logika perhitungan ongkir sesuai kebutuhan Anda
+  
+    // Ambil post dengan post type 'ongkir' dan kondisi post meta
+    $args = array(
+      'post_type' => 'ongkir',
+      'meta_query' => array(
+        'relation' => 'AND',
+        array(
+          'key' => 'alamat_dari',
+          'value' => $dari,
+          'compare' => '=',
+        ),
+        array(
+          'key' => 'alamat_tujuan',
+          'value' => $tujuan,
+          'compare' => '=',
+        ),
+      ),
+    );
+  
+    $ongkir_query = get_posts($args);
+  
+    if ($ongkir_query) {
+      // Jika ditemukan, ambil nilai post meta yang sesuai
+      $ongkir_value = get_post_meta($ongkir_query[0]->ID, 'tarif', true);
+      $ongkir_value = $ongkir_value * $berat;
+  
+      // Lakukan sesuatu dengan nilai post meta, misalnya, tampilkan atau hitung total ongkir
+      $ongkir = 'Rp ' . number_format($ongkir_value, 0, ',', '.');
+    } else {
+      // Jika tidak ditemukan, berikan nilai default
+      $ongkir = 'Rp 10,000';
+    }
+  
+    return $ongkir;
+  }

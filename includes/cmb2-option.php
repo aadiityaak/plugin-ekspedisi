@@ -5,6 +5,7 @@
 function cmb2_custom_metabox()
 {
     $post_id = isset($_GET['post']) ? $_GET['post'] : '';
+    $prefix = '';
     $cmb = new_cmb2_box(array(
         'id'            => 'pengirim_metabox',
         'title'         => __('Informasi Pengirim', 'cmb2'),
@@ -225,18 +226,15 @@ function cmb2_custom_metabox()
         'title'         => __('Informasi Ongkir', 'cmb2'),
         'object_types'  => array('ongkir'), // Sesuaikan dengan jenis post type yang Anda inginkan
     ));
-    // Field untuk berat
-    $cmb_ongkir->add_field(array(
-        'name' => 'Berat (Kg)',
-        'id'   => 'berat',
-        'type' => 'text',
-    ));
 
     // Field untuk tarif
     $cmb_ongkir->add_field(array(
-        'name' => 'Tarif/Kg',
+        'name' => 'Tarif per 1 Kg',
         'id'   => 'tarif',
         'type' => 'text',
+        'attributes' => array(
+            'type' => 'number',
+        ),
     ));
 
 
