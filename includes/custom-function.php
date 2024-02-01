@@ -34,7 +34,7 @@ function get_post_by_awb()
                 // $tanggal_status = date('d-m-Y H:i', strtotime($tanggal_status));
 
                 // Tampilkan nilai meta dengan format yang diinginkan
-                echo '<div>' . $tanggal_status . ' WIB</div>';
+                echo '<div class="text-end"><span class="badge bg-primary">' . $tanggal_status . ' WIB</span></div>';
                 ?>
                 <small>From</small>
                 <div class="row">
@@ -235,3 +235,61 @@ function hitung_ongkir($dari, $tujuan, $berat) {
   
     return $ongkir;
   }
+
+
+// Fungsi untuk menambahkan shortcode dan menangani logika absensi
+function absensi_shortcode() {
+    ob_start(); ?>
+
+    <div>
+        <p>Pilih shift:</p>
+        <select class="form-select" id="shiftDropdown">
+            <option value="">-</option>
+            <option value="pagi">Pagi</option>
+            <option value="malam">Malam</option>
+        </select>
+        <button class="btn btn-primary" id="checkInBtn">Check-in</button>
+        <button class="btn btn-primary" id="checkOutBtn">Check-out</button>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
+// Mendaftarkan shortcode
+add_shortcode('absensi', 'absensi_shortcode');
+
+// Fungsi untuk menangani logika absensi dan menyimpan data di post type
+add_action('wp_ajax_handle_absen', 'handle_absen_callback');
+add_action('wp_ajax_nopriv_handle_absen', 'handle_absen_callback');
+
+function handle_absen_callback() {
+    if (isset($_POST['shift'], $_POST['action_type'], $_POST['latitude'], $_POST['longitude'])) {
+        $shift = sanitize_text_field($_POST['shift']);
+        $action_type = sanitize_text_field($_POST['action_type']);
+        $latitude = sanitize_text_field($_POST['latitude']);
+        $longitude = sanitize_text_field($_POST['longitude']);
+
+        // Mendapatkan data user yang sedang login
+        $user_id = get_current_user_id();
+
+        // Membuat post baru dengan post type 'absensi'
+        $post_id = wp_insert_post(array(
+            'post_type' => 'absensi',
+            'post_title' => '$user_id ' . date('Y-m-d'),
+            'post_status' => 'publish',
+            'post_author' => $user_id,
+        ));
+
+        // Menyimpan informasi absen sebagai post meta
+        update_post_meta($post_id, '_shift', $shift);
+        update_post_meta($post_id, '_action_type', $action_type);
+        update_post_meta($post_id, '_latitude', $latitude);
+        update_post_meta($post_id, '_longitude', $longitude);
+
+        // Mengirim respon ke klien
+        wp_send_json_success('Absen berhasil disimpan.');
+    } else {
+        // Mengirim respon ke klien jika terjadi kesalahan
+        wp_send_json_error('Parameter tidak lengkap.');
+    }
+}

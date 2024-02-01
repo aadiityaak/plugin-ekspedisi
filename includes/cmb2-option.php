@@ -110,7 +110,6 @@ function cmb2_custom_metabox()
 
 
 
-
     $cmb_dari = new_cmb2_box(array(
         'id'            => 'metabox_dari',
         'title'         => __('Informasi Dari', 'cmb2'),
@@ -239,66 +238,32 @@ function cmb2_custom_metabox()
 
 
     // Detail Absensi Metabox
-    $detail_absensi_metabox = new_cmb2_box(array(
-        'id'           => $prefix . 'detail_absensi',
-        'title'        => esc_html__('Detail Absensi', 'online-generator'),
-        'object_types' => ['absensi'],
-        'context'      => 'normal',
+    // Field untuk status
+    $cmb_group_absensi = new_cmb2_box(array(
+        'id'           => 'absensi_group',
+        'title'        => esc_html__('Data Absensi', 'cmb2'),
+        'object_types' => array('absensi'),
     ));
 
-    // Fields for Detail Absensi Metabox
-    $detail_absensi_metabox->add_field(array(
-        'name' => esc_html__('Tanggal (Date)', 'online-generator'),
-        'id'   => $prefix . 'tanggal',
-        'type' => 'text_date',
+    // $group_field_id is the field id string, so in this case: 'yourprefix_group_status_pengiriman'
+    $data_absensi = $cmb_group_absensi->add_field(array(
+        'id'          => 'yourprefix_group_status_pengiriman',
+        'type'        => 'group',
+        'description' => esc_html__('Informasi Status Pengiriman', 'cmb2'),
+        'options'     => array(
+            'group_title'    => esc_html__('Status {#}', 'cmb2'), // {#} gets replaced by row number
+            'add_button'     => esc_html__('Add Another Status', 'cmb2'),
+            'remove_button'  => esc_html__('Remove Status', 'cmb2'),
+            'sortable'       => true,
+        ),
     ));
 
-    $detail_absensi_metabox->add_field(array(
-        'name' => esc_html__('Jam Masuk (Check-in Time)', 'online-generator'),
-        'id'   => $prefix . 'jam_masuk',
-        'type' => 'text_time',
+    $cmb_group_absensi->add_group_field($data_absensi, array(
+        'name'    => esc_html__('Tanggal', 'cmb2'),
+        'id'      => 'tanggal',
+        'type'    => 'text_datetime_timestamp',
     ));
 
-    $detail_absensi_metabox->add_field(array(
-        'name' => esc_html__('Jam Pulang (Check-out Time)', 'online-generator'),
-        'id'   => $prefix . 'jam_pulang',
-        'type' => 'text_time',
-    ));
-
-    $detail_absensi_metabox->add_field(array(
-        'name' => esc_html__('Lokasi (Location)', 'online-generator'),
-        'id'   => $prefix . 'lokasi',
-        'type' => 'text',
-    ));
-
-    $detail_absensi_metabox->add_field(array(
-        'name'    => esc_html__('Status Kehadiran', 'online-generator'),
-        'id'      => $prefix . 'status_kehadiran',
-        'type'    => 'select',
-        'options' => [
-            'Hadir'       => esc_html__('Hadir', 'online-generator'),
-            'Izin'        => esc_html__('Izin', 'online-generator'),
-            'Tidak hadir' => esc_html__('Tidak hadir', 'online-generator'),
-        ],
-    ));
-
-    $detail_absensi_metabox->add_field(array(
-        'name' => esc_html__('Keterangan (Remarks)', 'online-generator'),
-        'id'   => $prefix . 'keterangan',
-        'type' => 'textarea',
-    ));
-
-    $detail_absensi_metabox->add_field(array(
-        'name' => esc_html__('Nama Karyawan (User ID)', 'online-generator'),
-        'id'   => $prefix . 'nama_karyawan',
-        'type' => 'text',
-    ));
-
-    $detail_absensi_metabox->add_field(array(
-        'name' => esc_html__('Face ID', 'online-generator'),
-        'id'   => $prefix . 'face_id',
-        'type' => 'textarea',
-    ));
 }
 
 // Panggil fungsi pembuatan metabox

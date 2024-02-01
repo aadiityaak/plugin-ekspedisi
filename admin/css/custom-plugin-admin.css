@@ -20,6 +20,11 @@
   left: -10px !important;
 }
 .cmb2-wrap select,
-.cmb2-wrap input {
+.cmb2-wrap input,
+.cmb2-wrap textarea {
   width: 100% !important;
+}
+.cmb2-wrap input.cmb2-text-small,
+.cmb2-wrap input.cmb2-timepicker {
+  max-width: 100px;
 }

@@ -36,16 +36,17 @@ class Custom_Plugin_Shortcode
     {
         ob_start(); ?>
 
-        <div class="">
-            <div class="boxt bg-secondary p-3 rounded">
-                <h4 class="text-white fw-bold">LACAK KIRIMAN</h4>
+        <div class="frame-cek-resi">
+            <div class="">
                 <form action="" method="post" class="form-cek-resi">
-                    <div class="row">
+                    <div class="row align-items-end">
                         <div class="col-9">
-                            <label class="text-white font-size-10">
-                                <input type="text" id="tracking" name="tracking" placeholder="No AWB" class="form-control required" autocomplete="off">
+                            <label for="tracking" class="font-size-10">
                                 <small class="form-text">Masukkan No AWB</small>
                             </label>
+                            <input type="text" id="tracking" name="tracking" placeholder="No AWB" class="form-control required" autocomplete="off">
+                                
+                            
                         </div>
                         <div class="col-3">
                             <label>
@@ -61,7 +62,7 @@ class Custom_Plugin_Shortcode
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="modalResi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalResiLabel" aria-hidden="true">
+        <div class="modal fade text-dark" id="modalResi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalResiLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content" id="modalResiContent">
                     <div class="p-4">
@@ -108,12 +109,11 @@ class Custom_Plugin_Shortcode
         // echo '</pre>';
         ?>
 
-        <div class="card">
-            <form class="p-4" id="form-cek-ongkir" action="#hasil-ongkir">
-                <h4 class="text-dark fw-bold">TARIF KIRIMAN</h4>
+        <div class="frame-cek-ongkir">
+            <form id="form-cek-ongkir" action="#hasil-ongkir">
                 <div class="row align-items-end">
                     <div class="col-md-4 mb-2 mb-md-0">
-                        <label for="dari">Dari Alamat</label>
+                        <label for="dari"><small>Dari Alamat</small></label>
                         <input class="form-control" name="dari" list="dari" required>
                         <datalist id="dari">
                             <?php
@@ -127,7 +127,7 @@ class Custom_Plugin_Shortcode
                         </datalist>
                     </div>
                     <div class="col-md-4 mb-2 mb-md-0">
-                        <label for="tujuan">Tujuan Alamat</label>
+                        <label for="tujuan"><small>Tujuan Alamat</small></label>
                         <input class="form-control" name="tujuan" list="tujuan" required>
                         <datalist id="tujuan">
                             <?php
@@ -141,16 +141,16 @@ class Custom_Plugin_Shortcode
                         </datalist>
                     </div>
                     <div class="col-md-2 mb-2 mb-md-0">
-                        <label for="berat">Berat (kg)</label>
+                        <label for="berat"><small>Berat (kg)</small></label>
                         <input min="1" type="number" class="form-control" name="berat" value="1" required="">
                     </div>
                     <div class="col-md-2 text-center">
-                        <button class="btn btn-primary" type="submit" data-bs-toggle="modal" data-bs-target="#modalOngkir">Cek</button>
+                        <button class="btn btn-primary" type="submit">Cek</button>
                     </div>
                 </div>
             </form>
             <div class="modal fade" id="modalOngkir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalResiLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-centered modal-lg text-dark">
                 <div class="modal-content" id="modalOngkirContent">
                     <div class="p-4">
                         Loading data...
@@ -190,6 +190,7 @@ class Custom_Plugin_Shortcode
         // Mengembalikan waktu dan tanggal saat ini
         return $tanggal_waktu_saat_ini;
     }
+
 }
 
 // Inisialisasi class Custom_Plugin_Shortcode
