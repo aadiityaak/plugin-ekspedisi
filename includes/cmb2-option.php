@@ -249,9 +249,9 @@ function cmb2_custom_metabox()
     $data_absensi = $cmb_group_absensi->add_field(array(
         'id'          => 'yourprefix_group_status_pengiriman',
         'type'        => 'group',
-        'description' => esc_html__('Informasi Status Pengiriman', 'cmb2'),
+        'description' => esc_html__('Data Absensi', 'cmb2'),
         'options'     => array(
-            'group_title'    => esc_html__('Status {#}', 'cmb2'), // {#} gets replaced by row number
+            'group_title'    => esc_html__('Absensi {#}', 'cmb2'), // {#} gets replaced by row number
             'add_button'     => esc_html__('Add Another Status', 'cmb2'),
             'remove_button'  => esc_html__('Remove Status', 'cmb2'),
             'sortable'       => true,

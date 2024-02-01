@@ -239,18 +239,28 @@ function hitung_ongkir($dari, $tujuan, $berat) {
 
 // Fungsi untuk menambahkan shortcode dan menangani logika absensi
 function absensi_shortcode() {
-    ob_start(); ?>
+    ob_start();
+
+    // Mendapatkan nilai shift dari cookie
+    $selectedShift = isset($_COOKIE['selectedShift']) ? $_COOKIE['selectedShift'] : '';
+    $sifts = ['pagi', 'malam'];
+    ?>
 
     <div>
         <p>Pilih shift:</p>
-        <select class="form-select" id="shiftDropdown">
-            <option value="">-</option>
-            <option value="pagi">Pagi</option>
-            <option value="malam">Malam</option>
+        <select class="form-select mb-3" id="shiftDropdown">
+            <option value="">-- Pilih Shift --</option>
+            <?php
+            foreach ($sifts as $sift) {
+                $selected = $selectedShift === $sift ? 'selected' : '';
+                echo '<option value="' . $sift . '" ' . $selected . '>' . ucfirst($sift) . '</option>';
+            }
+            ?>
         </select>
         <button class="btn btn-primary" id="checkInBtn">Check-in</button>
         <button class="btn btn-primary" id="checkOutBtn">Check-out</button>
     </div>
+
     <?php
     return ob_get_clean();
 }
@@ -275,7 +285,7 @@ function handle_absen_callback() {
         // Membuat post baru dengan post type 'absensi'
         $post_id = wp_insert_post(array(
             'post_type' => 'absensi',
-            'post_title' => '$user_id ' . date('Y-m-d'),
+            'post_title' => $user_id . ' - ' . date('Y-m-d'),
             'post_status' => 'publish',
             'post_author' => $user_id,
         ));
