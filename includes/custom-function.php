@@ -154,7 +154,7 @@ function get_post_by_awb()
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
-<?php
+    <?php
     }
 
     wp_die(); // Penting untuk mengakhiri eksekusi dan mengembalikan respons ke JavaScript
@@ -164,7 +164,8 @@ add_action('wp_ajax_get_post_by_awb', 'get_post_by_awb');
 add_action('wp_ajax_nopriv_get_post_by_awb', 'get_post_by_awb');
 
 // Fungsi untuk mengambil nilai field secara otomatis
-function ambil_nilai_otomatis() {
+function ambil_nilai_otomatis()
+{
     // Buat nomor acak 4 digit
     $random_number = sprintf('%04d', mt_rand(0, 9999));
     // Bangun format nilai field
@@ -181,64 +182,67 @@ add_action('wp_ajax_ambil_nilai_otomatis', 'ambil_nilai_otomatis');
 add_action('wp_ajax_get_ongkir', 'get_ongkir_data');
 add_action('wp_ajax_nopriv_get_ongkir', 'get_ongkir_data');
 
-function get_ongkir_data() {
-  // Ambil data dari permintaan Ajax
-  $dari = sanitize_text_field($_POST['dari']);
-  $tujuan = sanitize_text_field($_POST['tujuan']);
-  $berat = intval($_POST['berat']);
+function get_ongkir_data()
+{
+    // Ambil data dari permintaan Ajax
+    $dari = sanitize_text_field($_POST['dari']);
+    $tujuan = sanitize_text_field($_POST['tujuan']);
+    $berat = intval($_POST['berat']);
 
-  // Lakukan sesuatu dengan data ini, misalnya, hitung ongkir
-  $ongkir = hitung_ongkir($dari, $tujuan, $berat);
+    // Lakukan sesuatu dengan data ini, misalnya, hitung ongkir
+    $ongkir = hitung_ongkir($dari, $tujuan, $berat);
 
-  // Kembalikan data sebagai respons Ajax
-  echo $ongkir;
+    // Kembalikan data sebagai respons Ajax
+    echo $ongkir;
 
-  // Pastikan untuk menghentikan eksekusi setelah memberikan respons
-  wp_die();
+    // Pastikan untuk menghentikan eksekusi setelah memberikan respons
+    wp_die();
 }
 
-function hitung_ongkir($dari, $tujuan, $berat) {
+function hitung_ongkir($dari, $tujuan, $berat)
+{
     // Lakukan perhitungan ongkir berdasarkan data yang diterima
     // Implementasikan logika perhitungan ongkir sesuai kebutuhan Anda
-  
+
     // Ambil post dengan post type 'ongkir' dan kondisi post meta
     $args = array(
-      'post_type' => 'ongkir',
-      'meta_query' => array(
-        'relation' => 'AND',
-        array(
-          'key' => 'alamat_dari',
-          'value' => $dari,
-          'compare' => '=',
+        'post_type' => 'ongkir',
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key' => 'alamat_dari',
+                'value' => $dari,
+                'compare' => '=',
+            ),
+            array(
+                'key' => 'alamat_tujuan',
+                'value' => $tujuan,
+                'compare' => '=',
+            ),
         ),
-        array(
-          'key' => 'alamat_tujuan',
-          'value' => $tujuan,
-          'compare' => '=',
-        ),
-      ),
     );
-  
+
     $ongkir_query = get_posts($args);
-  
+
     if ($ongkir_query) {
-      // Jika ditemukan, ambil nilai post meta yang sesuai
-      $ongkir_value = get_post_meta($ongkir_query[0]->ID, 'tarif', true);
-      $ongkir_value = $ongkir_value * $berat;
-  
-      // Lakukan sesuatu dengan nilai post meta, misalnya, tampilkan atau hitung total ongkir
-      $ongkir = 'Rp ' . number_format($ongkir_value, 0, ',', '.');
+        // Jika ditemukan, ambil nilai post meta yang sesuai
+        $ongkir_value = get_post_meta($ongkir_query[0]->ID, 'tarif', true);
+        $ongkir_value = $ongkir_value * $berat;
+
+        // Lakukan sesuatu dengan nilai post meta, misalnya, tampilkan atau hitung total ongkir
+        $ongkir = 'Rp ' . number_format($ongkir_value, 0, ',', '.');
     } else {
-      // Jika tidak ditemukan, berikan nilai default
-      $ongkir = 'Rp 10,000';
+        // Jika tidak ditemukan, berikan nilai default
+        $ongkir = 'Rp 10,000';
     }
-  
+
     return $ongkir;
-  }
+}
 
 
 // Fungsi untuk menambahkan shortcode dan menangani logika absensi
-function absensi_shortcode() {
+function absensi_shortcode()
+{
     ob_start();
 
     // Mendapatkan nilai shift dari cookie
@@ -261,7 +265,7 @@ function absensi_shortcode() {
         <button class="btn btn-primary" id="checkOutBtn">Check-out</button>
     </div>
 
-    <?php
+<?php
     return ob_get_clean();
 }
 
@@ -272,7 +276,8 @@ add_shortcode('absensi', 'absensi_shortcode');
 add_action('wp_ajax_handle_absen', 'handle_absen_callback');
 add_action('wp_ajax_nopriv_handle_absen', 'handle_absen_callback');
 
-function handle_absen_callback() {
+function handle_absen_callback()
+{
     if (isset($_POST['shift'], $_POST['action_type'], $_POST['latitude'], $_POST['longitude'])) {
         $shift = sanitize_text_field($_POST['shift']);
         $action_type = sanitize_text_field($_POST['action_type']);
@@ -291,10 +296,10 @@ function handle_absen_callback() {
         ));
 
         // Menyimpan informasi absen sebagai post meta
-        update_post_meta($post_id, '_shift', $shift);
-        update_post_meta($post_id, '_action_type', $action_type);
-        update_post_meta($post_id, '_latitude', $latitude);
-        update_post_meta($post_id, '_longitude', $longitude);
+        update_post_meta($post_id, 'shift', $shift);
+        update_post_meta($post_id, $action_type, '');
+        update_post_meta($post_id, 'latitude', $latitude);
+        update_post_meta($post_id, 'longitude', $longitude);
 
         // Mengirim respon ke klien
         wp_send_json_success('Absen berhasil disimpan.');

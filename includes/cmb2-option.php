@@ -117,45 +117,45 @@ function cmb2_custom_metabox()
     ));
 
     // Field untuk provinsi
-    $provinsi_dari_value = get_post_meta( $post_id, 'provinsi_dari', true );
-    $cmb_dari->add_field( array(
+    $provinsi_dari_value = get_post_meta($post_id, 'provinsi_dari', true);
+    $cmb_dari->add_field(array(
         'name'             => 'Provinsi',
         'id'               => 'provinsi_dari',
         'type'             => 'select',
         'show_option_none' => true,
         'options'          => array(
-            '-' => esc_html__( '-', 'cmb2' ),
+            '-' => esc_html__('-', 'cmb2'),
         ),
         'attributes'       => array(
             'class' => $provinsi_dari_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         ),
-    ) );
+    ));
 
     // Field untuk kabupaten
-    $kabupaten_dari_value = get_post_meta( $post_id, 'kabupaten_dari', true );
+    $kabupaten_dari_value = get_post_meta($post_id, 'kabupaten_dari', true);
     $cmb_dari->add_field(array(
         'name' => 'Kabupaten/Kota',
         'id'   => 'kabupaten_dari',
-		'type'             => 'select',
-		'show_option_none' => true,
-		'options'          => array(
-			'-' => esc_html__( '-', 'cmb2' ),
-		),
+        'type'             => 'select',
+        'show_option_none' => true,
+        'options'          => array(
+            '-' => esc_html__('-', 'cmb2'),
+        ),
         'attributes'       => array(
             'class' => $kabupaten_dari_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
     ));
 
     // Field untuk kecamatan
-    $kecamatan_dari_value = get_post_meta( $post_id, 'kecamatan_dari', true );
+    $kecamatan_dari_value = get_post_meta($post_id, 'kecamatan_dari', true);
     $cmb_dari->add_field(array(
         'name' => 'Kecamatan',
         'id'   => 'kecamatan_dari',
-		'type'             => 'select',
-		'show_option_none' => true,
-		'options'          => array(
-			'-' => esc_html__( '-', 'cmb2' ),
-		),
+        'type'             => 'select',
+        'show_option_none' => true,
+        'options'          => array(
+            '-' => esc_html__('-', 'cmb2'),
+        ),
         'attributes'       => array(
             'class' => $kecamatan_dari_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
@@ -172,44 +172,44 @@ function cmb2_custom_metabox()
         'object_types'  => array('ongkir'), // Sesuaikan dengan jenis post type yang Anda inginkan
     ));
     // Field untuk provinsi
-    $provinsi_tujuan_value = get_post_meta( $post_id, 'provinsi_tujuan', true );
+    $provinsi_tujuan_value = get_post_meta($post_id, 'provinsi_tujuan', true);
     $cmb_tujuan->add_field(array(
         'name' => 'Provinsi',
         'id'   => 'provinsi_tujuan',
-		'type'             => 'select',
-		'show_option_none' => true,
-		'options'          => array(
-			'-' => esc_html__( '-', 'cmb2' ),
-		),
+        'type'             => 'select',
+        'show_option_none' => true,
+        'options'          => array(
+            '-' => esc_html__('-', 'cmb2'),
+        ),
         'attributes'       => array(
             'class' => $provinsi_tujuan_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
     ));
 
     // Field untuk kabupaten 
-    $kabupaten_tujuan_value = get_post_meta( $post_id, 'kabupaten_tujuan', true );
+    $kabupaten_tujuan_value = get_post_meta($post_id, 'kabupaten_tujuan', true);
     $cmb_tujuan->add_field(array(
         'name' => 'Kabupaten/Kota',
         'id'   => 'kabupaten_tujuan',
-		'type'             => 'select',
-		'show_option_none' => true,
-		'options'          => array(
-			'-' => esc_html__( '-', 'cmb2' ),
-		),
+        'type'             => 'select',
+        'show_option_none' => true,
+        'options'          => array(
+            '-' => esc_html__('-', 'cmb2'),
+        ),
         'attributes'       => array(
             'class' => $kabupaten_tujuan_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
     ));
     // Field untuk kecamatan
-    $kecamatan_tujuan_value = get_post_meta( $post_id, 'kecamatan_tujuan', true );
+    $kecamatan_tujuan_value = get_post_meta($post_id, 'kecamatan_tujuan', true);
     $cmb_tujuan->add_field(array(
         'name' => 'Kecamatan',
         'id'   => 'kecamatan_tujuan',
-		'type'             => 'select',
-		'show_option_none' => true,
-		'options'          => array(
-			'-' => esc_html__( '-', 'cmb2' ),
-		),
+        'type'             => 'select',
+        'show_option_none' => true,
+        'options'          => array(
+            '-' => esc_html__('-', 'cmb2'),
+        ),
         'attributes'       => array(
             'class' => $kecamatan_tujuan_value, // Menambahkan kelas 'tambahan' dan nilai dari post meta
         )
@@ -245,25 +245,47 @@ function cmb2_custom_metabox()
         'object_types' => array('absensi'),
     ));
 
-    // $group_field_id is the field id string, so in this case: 'yourprefix_group_status_pengiriman'
-    $data_absensi = $cmb_group_absensi->add_field(array(
-        'id'          => 'yourprefix_group_status_pengiriman',
-        'type'        => 'group',
-        'description' => esc_html__('Data Absensi', 'cmb2'),
-        'options'     => array(
-            'group_title'    => esc_html__('Absensi {#}', 'cmb2'), // {#} gets replaced by row number
-            'add_button'     => esc_html__('Add Another Status', 'cmb2'),
-            'remove_button'  => esc_html__('Remove Status', 'cmb2'),
-            'sortable'       => true,
+    //Fiel shift pagi dan malam
+    $cmb_group_absensi->add_field(array(
+        'name' => 'Shift',
+        'id'   => 'shift',
+        'type'             => 'select',
+        'show_option_none' => true,
+        'options'          => array(
+            'pagi' => 'Pagi',
+            'malam' => 'Malam'
         ),
     ));
 
-    $cmb_group_absensi->add_group_field($data_absensi, array(
-        'name'    => esc_html__('Tanggal', 'cmb2'),
-        'id'      => 'tanggal',
-        'type'    => 'text_datetime_timestamp',
+    $cmb_group_absensi->add_field(array(
+        'name' => 'Check In',
+        'id'   => 'checkin',
+        'type' => 'text_datetime_timestamp',
     ));
 
+    $cmb_group_absensi->add_field(array(
+        'name' => 'Check Out',
+        'id'   => 'checkout',
+        'type' => 'text_datetime_timestamp',
+    ));
+
+    $cmb_group_absensi->add_field(array(
+        'name' => 'Latitude',
+        'id'   => 'latitude',
+        'type' => 'text',
+    ));
+
+    $cmb_group_absensi->add_field(array(
+        'name' => 'Longitude',
+        'id'   => 'longitude',
+        'type' => 'text',
+    ));
+
+    $cmb_group_absensi->add_field(array(
+        'name' => 'Catatan',
+        'id'   => 'catatan',
+        'type' => 'textarea_small',
+    ));
 }
 
 // Panggil fungsi pembuatan metabox

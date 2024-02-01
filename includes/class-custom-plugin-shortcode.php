@@ -45,8 +45,8 @@ class Custom_Plugin_Shortcode
                                 <small class="form-text">Masukkan No AWB</small>
                             </label>
                             <input type="text" id="tracking" name="tracking" placeholder="No AWB" class="form-control required" autocomplete="off">
-                                
-                            
+
+
                         </div>
                         <div class="col-3">
                             <label>
@@ -103,42 +103,43 @@ class Custom_Plugin_Shortcode
 
         // Reset post data
         wp_reset_postdata();
-        
+
         // echo '<pre>';
         // print_r($alamat);
         // echo '</pre>';
-        ?>
+    ?>
 
         <div class="frame-cek-ongkir">
             <form id="form-cek-ongkir" action="#hasil-ongkir">
                 <div class="row align-items-end">
                     <div class="col-md-4 mb-2 mb-md-0">
                         <label for="dari"><small>Dari Alamat</small></label>
-                        <input class="form-control" name="dari" list="dari" required>
-                        <datalist id="dari">
+                        <select class="form-control" name="dari" required>
+                            <option>-</option>
                             <?php
-                            if(isset($alamat['dari']) && is_array($alamat['dari'])){
+                            if (isset($alamat['dari']) && is_array($alamat['dari'])) {
                                 $daris = array_unique($alamat['dari']);
-                                foreach($daris as $nama_alamat){
-                                    echo '<option value="'.$nama_alamat.'">';
+                                foreach ($daris as $nama_alamat) {
+                                    echo '<option value="' . $nama_alamat . '">' . ucwords(strtolower($nama_alamat)) . '</option>';
                                 }
                             }
                             ?>
-                        </datalist>
+                        </select>
+
                     </div>
                     <div class="col-md-4 mb-2 mb-md-0">
                         <label for="tujuan"><small>Tujuan Alamat</small></label>
-                        <input class="form-control" name="tujuan" list="tujuan" required>
-                        <datalist id="tujuan">
+                        <select class="form-control" name="tujuan" required>
+                            <option>-</option>
                             <?php
-                            if(isset($alamat['tujuan']) && is_array($alamat['tujuan'])){
+                            if (isset($alamat['tujuan']) && is_array($alamat['tujuan'])) {
                                 $tujuans = array_unique($alamat['tujuan']);
-                                foreach($tujuans as $nama_alamat){
-                                    echo '<option value="'.$nama_alamat.'">';
+                                foreach ($tujuans as $nama_alamat) {
+                                    echo '<option value="' . $nama_alamat . '">' . ucwords(strtolower($nama_alamat)) . '</option>';
                                 }
                             }
                             ?>
-                        </datalist>
+                        </select>
                     </div>
                     <div class="col-md-2 mb-2 mb-md-0">
                         <label for="berat"><small>Berat (kg)</small></label>
@@ -150,18 +151,18 @@ class Custom_Plugin_Shortcode
                 </div>
             </form>
             <div class="modal fade" id="modalOngkir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalResiLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg text-dark">
-                <div class="modal-content" id="modalOngkirContent">
-                    <div class="p-4">
-                        Loading data...
+                <div class="modal-dialog modal-dialog-centered modal-lg text-dark">
+                    <div class="modal-content" id="modalOngkirContent">
+                        <div class="p-4">
+                            Loading data...
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-                
+
         </div>
 
-        <?php
+<?php
         return ob_get_clean();
     }
 
@@ -190,7 +191,6 @@ class Custom_Plugin_Shortcode
         // Mengembalikan waktu dan tanggal saat ini
         return $tanggal_waktu_saat_ini;
     }
-
 }
 
 // Inisialisasi class Custom_Plugin_Shortcode
