@@ -248,21 +248,43 @@ function absensi_shortcode()
     // Mendapatkan nilai shift dari cookie
     $selectedShift = isset($_COOKIE['selectedShift']) ? $_COOKIE['selectedShift'] : '';
     $sifts = ['pagi', 'malam'];
+    $user_id = get_current_user_id();
+    $post_title = $user_id . ' - ' . date('Y-m-d');
+    $sudah_ada = get_post_id_by_title($post_title);
+    $checkin = get_post_meta($sudah_ada, 'checkin', true);
+    $checkout = get_post_meta($sudah_ada, 'checkout', true);
+    $disable_checkin = $sudah_ada && $checkin != '' ? 'disabled' : '';
     ?>
 
     <div>
-        <p>Pilih shift:</p>
-        <select class="form-select mb-3" id="shiftDropdown">
-            <option value="">-- Pilih Shift --</option>
-            <?php
-            foreach ($sifts as $sift) {
-                $selected = $selectedShift === $sift ? 'selected' : '';
-                echo '<option value="' . $sift . '" ' . $selected . '>' . ucfirst($sift) . '</option>';
-            }
-            ?>
-        </select>
-        <button class="btn btn-primary" id="checkInBtn">Check-in</button>
-        <button class="btn btn-primary" id="checkOutBtn">Check-out</button>
+        <?php if (!$sudah_ada) {
+        ?>
+            <div class="pilih-shift">
+                <p>Pilih shift:</p>
+                <select class="form-select mb-3" id="shiftDropdown">
+                    <option value="">-- Pilih Shift --</option>
+                    <?php
+                    foreach ($sifts as $sift) {
+                        $selected = $selectedShift === $sift ? 'selected' : '';
+                        echo '<option value="' . $sift . '" ' . $selected . '>' . ucfirst($sift) . '</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+
+        <?php
+        }
+
+        if ($checkout != '') {
+            echo '<div class="text-center">Terima kasih telah menyelesaikan tugas hari ini! Selamat pulang kerja, semoga perjalanan pulang aman. Istirahat yang baik dan sampai jumpa besok!</div>';
+        } else {
+        ?>
+            <button class="btn btn-primary" id="checkInBtn" <?php echo $disable_checkin; ?>>Check-in</button>
+            <button class="btn btn-primary" id="checkOutBtn">Check-out</button>
+        <?php
+        }
+        ?>
+
     </div>
 
 <?php
@@ -278,33 +300,71 @@ add_action('wp_ajax_nopriv_handle_absen', 'handle_absen_callback');
 
 function handle_absen_callback()
 {
+    //set timezone jakarta
+    date_default_timezone_set('Asia/Jakarta');
     if (isset($_POST['shift'], $_POST['action_type'], $_POST['latitude'], $_POST['longitude'])) {
         $shift = sanitize_text_field($_POST['shift']);
         $action_type = sanitize_text_field($_POST['action_type']);
         $latitude = sanitize_text_field($_POST['latitude']);
         $longitude = sanitize_text_field($_POST['longitude']);
-
         // Mendapatkan data user yang sedang login
         $user_id = get_current_user_id();
+        $post_title = $user_id . ' - ' . date('Y-m-d');
 
-        // Membuat post baru dengan post type 'absensi'
-        $post_id = wp_insert_post(array(
-            'post_type' => 'absensi',
-            'post_title' => $user_id . ' - ' . date('Y-m-d'),
-            'post_status' => 'publish',
-            'post_author' => $user_id,
-        ));
+
+
+        $sudah_ada = get_post_id_by_title($post_title);
+        if ($sudah_ada) {
+            $post_id = $sudah_ada;
+        } else {
+            $post_id = wp_insert_post(array(
+                'post_type' => 'absensi',
+                'post_title' => $post_title,
+                'post_status' => 'publish',
+                // 'post_author' => $user_id,
+            ));
+        }
 
         // Menyimpan informasi absen sebagai post meta
         update_post_meta($post_id, 'shift', $shift);
-        update_post_meta($post_id, $action_type, '');
+        update_post_meta($post_id, $action_type, current_time('timestamp'));
         update_post_meta($post_id, 'latitude', $latitude);
         update_post_meta($post_id, 'longitude', $longitude);
+        update_post_meta($post_id, 'user_id', $user_id);
 
         // Mengirim respon ke klien
         wp_send_json_success('Absen berhasil disimpan.');
     } else {
         // Mengirim respon ke klien jika terjadi kesalahan
         wp_send_json_error('Parameter tidak lengkap.');
+    }
+}
+
+
+function get_post_id_by_title($post_title)
+{
+    // Lakukan query untuk mencari post dengan judul tertentu
+    $args = array(
+        'post_type' => 'absensi',  // Ganti dengan tipe post yang sesuai
+        'post_status' => 'publish',
+        'posts_per_page' => 1,
+        'title' => $post_title,
+    );
+
+    $query = new WP_Query($args);
+
+    // Cek apakah posting ditemukan
+    if ($query->have_posts()) {
+        // Posting ditemukan, ambil ID posting
+        $post_id = $query->posts[0]->ID;
+
+        // Reset query
+        wp_reset_postdata();
+
+        // Kembalikan ID posting
+        return $post_id;
+    } else {
+        // Posting tidak ditemukan
+        return false;
     }
 }

@@ -282,6 +282,12 @@ function cmb2_custom_metabox()
     ));
 
     $cmb_group_absensi->add_field(array(
+        'name' => 'User ID',
+        'id'   => 'user_id',
+        'type' => 'text',
+    ));
+
+    $cmb_group_absensi->add_field(array(
         'name' => 'Catatan',
         'id'   => 'catatan',
         'type' => 'textarea_small',

@@ -146,6 +146,9 @@ class Custom_Plugin
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/cmb2-option.php';
 
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-custom-plugin-column.php';
+
+
 		$this->loader = new Custom_Plugin_Loader();
 	}
 
