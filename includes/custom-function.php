@@ -254,19 +254,19 @@ function absensi_shortcode()
     $checkin = get_post_meta($sudah_ada, 'checkin', true);
     $checkout = get_post_meta($sudah_ada, 'checkout', true);
     $disable_checkin = $sudah_ada && $checkin != '' ? 'disabled' : '';
+    $disable_checkout = $sudah_ada ? '' : 'disabled';
     ?>
 
     <div>
         <?php if (!$sudah_ada) {
         ?>
             <div class="pilih-shift">
-                <p>Pilih shift:</p>
                 <select class="form-select mb-3" id="shiftDropdown">
                     <option value="">-- Pilih Shift --</option>
                     <?php
                     foreach ($sifts as $sift) {
                         $selected = $selectedShift === $sift ? 'selected' : '';
-                        echo '<option value="' . $sift . '" ' . $selected . '>' . ucfirst($sift) . '</option>';
+                        echo '<option value="' . $sift . '" ' . $selected . '>Shift ' . ucfirst($sift) . '</option>';
                     }
                     ?>
                 </select>
@@ -279,8 +279,19 @@ function absensi_shortcode()
             echo '<div class="text-center">Terima kasih telah menyelesaikan tugas hari ini! Selamat pulang kerja, semoga perjalanan pulang aman. Istirahat yang baik dan sampai jumpa besok!</div>';
         } else {
         ?>
-            <button class="btn btn-primary" id="checkInBtn" <?php echo $disable_checkin; ?>>Check-in</button>
-            <button class="btn btn-primary" id="checkOutBtn">Check-out</button>
+            <button class="btn btn-success" id="checkInBtn" <?php echo $disable_checkin; ?>>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16">
+                <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+                <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"/>
+                </svg>
+                Check-in
+            </button>
+            <button class="btn btn-danger" id="checkOutBtn" <?php echo $disable_checkout; ?>>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
+                <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+                </svg>
+                Check-out
+            </button>
         <?php
         }
         ?>
@@ -368,3 +379,88 @@ function get_post_id_by_title($post_title)
         return false;
     }
 }
+
+// Fungsi untuk membuat shortcode
+function tabel_absensi() {
+    ob_start(); // Memulai output buffering
+
+    // Mendapatkan ID pengguna berdasarkan meta "cucent_user"
+    $user_id = get_current_user_id();
+
+    // Argumen query untuk mendapatkan post type "absensi" dari pengguna tertentu
+    $args = array(
+        'post_type' => 'absensi',
+        'meta_key' => 'user_id',
+        'meta_value' => $user_id,
+        'posts_per_page' => 30,
+    );
+
+    // Melakukan query
+    $query = new WP_Query($args);
+
+    // Mengecek apakah ada post yang ditemukan
+    if ($query->have_posts()) {
+        // Membuat tabel Bootstrap
+        ?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Shift</th>
+                    <th>Checkin</th>
+                    <th>Checkout</th>
+                    <th>Catatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Loop untuk setiap post
+                while ($query->have_posts()) {
+                    $query->the_post();
+                    $post_id = get_the_ID();
+                    ?>
+                    <tr>
+                        <td><?php echo get_the_date(); ?></td>
+                        <td>
+                            <?php
+                            $shift = get_post_meta($post_id, 'shift', true);
+                            echo $shift;
+                            ?>
+                        </td>
+                        <td>
+                            <?php 
+                            $checkin = get_post_meta($post_id, 'checkin', true);
+                            echo $checkin != '' ? date('d-m-Y H:i:s', (int)$checkin) : '-';
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            $checkout = get_post_meta($post_id, 'checkout', true);
+                            echo $checkout != '' ? date('d-m-Y H:i:s', (int)$checkout) : '-';
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            $catatan = get_post_meta($post_id, 'catatan', true);
+                            echo $catatan;
+                            ?>
+                        </td>
+                    </tr>
+
+                    <?php
+                }
+                ?>
+            </tbody>
+        </table>
+        <?php
+    } else {
+        // Jika tidak ada post ditemukan
+        echo 'Tidak ada absensi ditemukan.';
+    }
+
+    // Mengakhiri output buffering dan mengembalikan hasilnya
+    return ob_get_clean();
+}
+
+// Mendaftarkan shortcode
+add_shortcode('tabel-absensi', 'tabel_absensi');
